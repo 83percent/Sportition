@@ -1,8 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.sportition.center">
     <uses-permission android:name="android.permission.INTERNET"/> <!-- <application> 요소 밖으로 이동 -->
 
     <application
-        android:label="sportition_center"
+        android:label="sportition"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
