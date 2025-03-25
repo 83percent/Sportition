@@ -7,45 +7,7 @@ class JoinService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> register(JoinModel joinModel) async {
-    switch (joinModel.userType) {
-      case 'client':
-        await registerClient(joinModel);
-        break;
-      case 'trainer':
-        await registerTrainer(joinModel);
-        break;
-      default:
-        throw Exception('잘못된 사용자 타입입니다.');
-    }
-  }
-
-  Future<void> registerClient(JoinModel joinModel) async {
-    // Client
-    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-      email: joinModel.email,
-      password: joinModel.password,
-    );
-
-    String clientId = userCredential.user!.uid;
-
-    await _firestore.collection('clients').doc(clientId).set({
-      'email': joinModel.email,
-      'name': joinModel.name,
-      'phoneNumber': joinModel.phone,
-      'memo': '',
-      'center': joinModel.centerUUID,
-    });
-
-    DocumentSnapshot centerDoc =
-        await _firestore.collection('centers').doc(joinModel.centerUUID).get();
-
-    if (centerDoc.exists) {
-      await _firestore.collection('centers').doc(joinModel.centerUUID).update({
-        'clients': FieldValue.arrayUnion([
-          {'name': joinModel.name, 'uid': clientId}
-        ])
-      });
-    }
+    await registerTrainer(joinModel);
   }
 
   Future<void> registerTrainer(JoinModel joinModel) async {

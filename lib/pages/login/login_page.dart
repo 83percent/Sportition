@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sportition_center/models/login/login_request_dto.dart';
 import 'package:sportition_center/shared/styles/app_colors.dart';
 import 'package:auto_size_text/auto_size_text.dart'; // AutoSizeText 패키지 추가
-import 'package:sportition_center/services/login_service.dart'; // LoginService 패키지 추가
+import 'package:sportition_center/services/login/login_service.dart'; // LoginService 패키지 추가
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,47 +12,31 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final LoginRequestDTO _loginRequestDTO = LoginRequestDTO();
 
   @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
   }
 
   Future<void> _login() async {
-    await LoginService.login(
-      context,
-      _emailController.text,
-      _passwordController.text,
-      _showAlert,
-    );
-  }
-
-  void _showAlert(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('확인'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    final loginService = LoginService();
+    try {
+      bool success = await loginService.login(context, _loginRequestDTO);
+      if (success) {
+        Navigator.pushReplacementNamed(context, '/home'); // 로그인 성공 시 홈 화면으로 이동
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())), // 에러 메시지 표시
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Color(0x99000000)),
                   ),
                   TextField(
-                    controller: _emailController,
+                    onChanged: (value) => _loginRequestDTO.email = value,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'example@xxx.xxx',
@@ -148,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   TextField(
-                    controller: _passwordController,
+                    onChanged: (value) => _loginRequestDTO.password = value,
                     obscureText: true, // 비밀번호 입력 시 텍스트를 숨기는 속성 추가
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -184,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 child: const Text(
-                  'LOGIN',
+                  '로그인',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 13,

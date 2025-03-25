@@ -5,10 +5,9 @@ import 'package:sportition_center/models/exercise/exercise_model.dart';
 import 'package:sportition_center/shared/styles/app_colors.dart';
 
 class ExerciseListWidget extends StatefulWidget {
-  final Function(Exercise) onExerciseSelected;
+  Function(Exercise)? onExerciseSelected;
 
-  const ExerciseListWidget({Key? key, required this.onExerciseSelected})
-      : super(key: key);
+  ExerciseListWidget({super.key, this.onExerciseSelected});
 
   @override
   _ExerciseListWidgetState createState() => _ExerciseListWidgetState();
@@ -129,7 +128,9 @@ class _ExerciseListWidgetState extends State<ExerciseListWidget> {
                           ),
                         ),
                         onTap: () {
-                          widget.onExerciseSelected(exercise);
+                          if (widget.onExerciseSelected != null) {
+                            widget.onExerciseSelected!(exercise);
+                          }
                         },
                       ),
                     );
