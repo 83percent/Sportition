@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportition_center/pages/centers/center_page.dart';
 
@@ -29,8 +28,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Logger _logger = Logger('SettingsPage');
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -60,15 +57,14 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: ListView(
         children: <Widget>[
-          if (userType == 'trainer')
-            ListTile(
-              title: const Text('센터 정보'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const CenterPage()),
-                );
-              },
-            ),
+          ListTile(
+            title: const Text('센터 정보'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const CenterPage()),
+              );
+            },
+          ),
           if (userType == 'trainer') const Divider(),
           ListTile(
             title: const Text(

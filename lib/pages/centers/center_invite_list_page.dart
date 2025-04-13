@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
-class ExerciseTypeAddPage extends StatefulWidget {
+class CenterInviteListPage extends StatefulWidget {
+  const CenterInviteListPage({super.key});
+
   @override
-  _ExerciseTypeAddPageState createState() => _ExerciseTypeAddPageState();
+  State<CenterInviteListPage> createState() => _CenterInviteListPageState();
 }
 
-class _ExerciseTypeAddPageState extends State<ExerciseTypeAddPage> {
+class _CenterInviteListPageState extends State<CenterInviteListPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +32,7 @@ class _ExerciseTypeAddPageState extends State<ExerciseTypeAddPage> {
                 Container(
                   alignment: Alignment.centerLeft, // 가로 기준 왼쪽에 위치
                   child: const Text(
-                    '운동 추가',
+                    '회원 등록 요청',
                     style: TextStyle(
                       fontFamily: 'NotoSansKR',
                       color: Colors.black,
@@ -34,26 +41,24 @@ class _ExerciseTypeAddPageState extends State<ExerciseTypeAddPage> {
                     ),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.centerRight, // 가로 기준 오른쪽에 위치
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.black,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                    size: 30,
                   ),
-                ),
+                )
               ],
             ),
           ),
+          centerTitle: false, // 제목을 중앙에 배치하지 않음
         ),
       ),
-      body: const Center(
-        child: Text('운동 추가 페이지'),
+      body: Center(
+        child: Text('센터 초대 리스트 페이지'),
       ),
     );
   }

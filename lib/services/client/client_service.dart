@@ -16,37 +16,42 @@ class ClientService {
   }
 
   Future<List<ClientDTO>> getClientDTOList() async {
-    List<ClientDTO> clientUIDList = [];
-    String? trainerUID;
+    List<ClientDTO> clientDTOList = [];
     String? centerUID;
 
     // Step 1: Get CenterUID
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    trainerUID = prefs.getString('trainerUID');
     centerUID = prefs.getString('centerUID');
 
+    // Step 2: firestore에서 회원 정보 갖고오기
+    // centers/{centerUID}/clients 전부 갖고와서 clientDTOList에 넣기
     if (centerUID == null || centerUID.isEmpty) {
-      // Step 1-1: firestore에서 trainerUID 가져오기
-      DocumentSnapshot trainerDoc =
-          await _firestore.collection('trainers').doc(trainerUID).get();
-      centerUID = trainerDoc.get('centerUID');
+      _logger.warning('CenterUID is null or empty');
+      return clientDTOList;
     }
 
-    if (centerUID == null || centerUID.isEmpty) {
-      throw Exception('센터 정보를 조회하는 과정에서 오류가 발생하였습니다.');
+    try {
+      QuerySnapshot clientsSnapshot = await _firestore
+          .collection('centers')
+          .doc(centerUID)
+          .collection('clients')
+          .get();
+
+      for (var doc in clientsSnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        ClientDTO clientDTO = ClientDTO(
+          clientUID: doc.id,
+          name: data['clientName'] ?? 'Unknown',
+          gender: data['gender'] ?? 'unset',
+        );
+
+        clientDTOList.add(clientDTO);
+      }
+    } catch (e) {
+      _logger.severe('Failed to fetch clients: $e');
     }
 
-    // Step 2: Get clients subcollection from centers/{centerUID}/clients
-    QuerySnapshot clientDocs = await _firestore
-        .collection('centers')
-        .doc(centerUID)
-        .collection('clients')
-        .get();
-    // TODO : clients doc이 없는 경우 어떤 오류를 반환하는가?
-
-    // Step 3: Map documents to ClientDTO list
-
-    return clientUIDList;
+    return clientDTOList;
   }
 
   Future<List<ClientModel>> getClients(String uid) async {

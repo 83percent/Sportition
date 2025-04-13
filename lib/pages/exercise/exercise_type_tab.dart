@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sportition_center/models/exercise/exercise_model.dart';
-import 'package:sportition_center/pages/exercise/exercise_list_widget.dart';
+import 'package:sportition_center/pages/exercise/exercise_list/exercise_list_widget.dart';
 
 class ExerciseTypeTab extends StatelessWidget {
   final Function(Exercise) onExerciseSelected;

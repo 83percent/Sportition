@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sportition_center/pages/exercise/exercise_record_page.dart';
+import 'package:sportition_center/pages/exercise/exercise_record/exercise_record_page.dart';
 import 'package:sportition_center/shared/styles/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // SharedPreferences import 추가
 import 'client_record_tab.dart';

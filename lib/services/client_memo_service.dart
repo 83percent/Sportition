@@ -6,7 +6,7 @@ class ClientMemoService {
   Future<String?> getClientMemo(String uid) async {
     try {
       DocumentSnapshot doc =
-          await _firestore.collection('clients').doc(uid).get();
+          await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>?;
         return data != null && data.containsKey('memo')
@@ -23,7 +23,7 @@ class ClientMemoService {
 
   Future<void> saveClientMemo(String uid, String memo) async {
     try {
-      await _firestore.collection('clients').doc(uid).update({'memo': memo});
+      await _firestore.collection('users').doc(uid).update({'memo': memo});
     } catch (e) {
       print('Error saving client memo: $e');
       throw e;

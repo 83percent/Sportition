@@ -24,6 +24,9 @@ class LoginService {
     _validatePassword(requestDTO.password);
 
     try {
+      final authProvider =
+          Provider.of<sportition_auth.AuthProvider>(context, listen: false);
+
       // Step 1. 사용자 정보 가져오기
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
@@ -40,8 +43,8 @@ class LoginService {
       }
 
       // Step 3. Provider에 사용자 정보 저장
-      Provider.of<sportition_auth.AuthProvider>(context, listen: false)
-          .setUser(userCredential.user!.uid, userDoc['name']);
+      authProvider.setUser(userCredential.user!.uid,
+          userDoc['name']); // context 대신 authProvider 사용
 
       // Step 4. SharedPreferences에 사용자 정보 저장
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,6 +53,11 @@ class LoginService {
 
       return true;
     } on FirebaseAuthException catch (e) {
+      _logger.info(e);
+      _logger.severe('Failed to sign in: $e');
+      throw Exception('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+    } on Exception catch (e) {
+      print(e);
       _logger.severe('Failed to sign in: $e');
       throw Exception('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
     }

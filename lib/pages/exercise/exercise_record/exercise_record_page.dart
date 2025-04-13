@@ -3,9 +3,8 @@ import 'package:sportition_center/models/exercise/exercise_model.dart';
 import 'package:sportition_center/pages/exercise/exercise_type_tab.dart'; // 추가된 import
 import 'package:sportition_center/pages/exercise/exercise_weight_tab.dart'; // 추가된 import
 import 'package:sportition_center/pages/exercise/exercise_count_tab.dart'; // 추가된 import
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sportition_center/services/exercise_record_save_service.dart'; // 추가된 import
+import 'package:sportition_center/services/record/record_service.dart'; // 추가된 import
 
 class ExerciseRecordPage extends StatefulWidget {
   final String uid;
@@ -28,8 +27,7 @@ class _ExerciseRecordPageState extends State<ExerciseRecordPage>
   int reps = 0;
   late TabController _tabController;
   late TextEditingController _weightController;
-  final ExerciseRecordSaveService _saveService =
-      ExerciseRecordSaveService(); // 추가된 코드
+  final RecordService _recordService = RecordService();
 
   @override
   void initState() {
@@ -57,12 +55,14 @@ class _ExerciseRecordPageState extends State<ExerciseRecordPage>
     final userUid = prefs.getString('uid') ?? '';
 
     try {
-      await _saveService.saveRecord(
+      await _recordService.save(
         uid: widget.uid,
-        exerciseValue: selectedExercise!.value,
-        weight: weight,
-        reps: reps,
-        userUid: userUid,
+        data: {
+          'exerciseId': selectedExercise!.value,
+          'exerciseName': selectedExercise!.name,
+          'weight': weight,
+          'count': reps,
+        },
       );
 
       Navigator.of(context).pop(); // 로딩창 닫기

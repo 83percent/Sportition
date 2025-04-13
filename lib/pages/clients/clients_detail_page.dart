@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sportition_center/pages/exercise/exercise_record_page.dart';
+import 'package:sportition_center/pages/clients/client_chart_tab.dart';
+import 'package:sportition_center/pages/exercise/exercise_record/exercise_record_page.dart';
 import 'package:sportition_center/shared/styles/app_colors.dart';
 import 'client_record_tab.dart';
 import 'client_memo_tab.dart';
@@ -26,7 +27,7 @@ class _MemberPageState extends State<MemberPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); // 탭의 길이를 2로 변경
+    _tabController = TabController(length: 3, vsync: this); // 탭의 길이를 2로 변경
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         FocusScope.of(context).unfocus();
@@ -101,6 +102,7 @@ class _MemberPageState extends State<MemberPage>
             controller: _tabController,
             labelColor: Colors.black,
             tabs: const [
+              Tab(text: '성장 그래프'),
               Tab(text: '일별 운동 기록'),
               Tab(text: '메모'),
             ],
@@ -109,19 +111,26 @@ class _MemberPageState extends State<MemberPage>
             child: TabBarView(
               controller: _tabController,
               children: [
+                ClientChartTab(uid: widget.uid),
                 _isClientRecordTabLoaded
                     ? ClientRecordTab(uid: widget.uid)
                     : FutureBuilder<void>(
-                        future: Future.delayed(Duration.zero, () {
-                          setState(() {
-                            _isClientRecordTabLoaded = true;
-                          });
-                        }),
+                        future: Future.delayed(
+                          Duration.zero,
+                          () {
+                            setState(
+                              () {
+                                _isClientRecordTabLoaded = true;
+                              },
+                            );
+                          },
+                        ),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return const Center(
-                                child: CircularProgressIndicator());
+                              child: CircularProgressIndicator(),
+                            );
                           }
                           return ClientRecordTab(uid: widget.uid);
                         },

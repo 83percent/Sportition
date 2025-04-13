@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.17.0
+  fl_chart: ^0.40.0
   firebase_core: ^2.14.0
   firebase_auth: ^4.7.1
   cloud_firestore: ^4.9.2

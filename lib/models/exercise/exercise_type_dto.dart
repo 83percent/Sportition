@@ -1,13 +1,9 @@
 class ExerciseTypeDTO {
-  String? exerciseUID;
-  String exerciseName;
-  String? regUID;
-  String? regDttm;
+  String name;
+  int? seq;
 
   ExerciseTypeDTO({
-    this.exerciseUID,
-    required this.exerciseName,
-    this.regUID,
-    this.regDttm,
+    required this.name,
+    this.seq,
   });
 }

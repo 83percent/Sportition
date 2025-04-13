@@ -73,17 +73,23 @@ class _MemberListPageState extends State<MemberListPage> {
                 toolbarHeight: 80,
                 title: Padding(
                   padding: const EdgeInsets.only(left: 16.0),
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: const Text(
-                      '회원',
-                      style: TextStyle(
-                        fontFamily: 'NotoSansKR',
-                        color: Colors.black,
-                        fontSize: 34,
-                        fontWeight: FontWeight.w600,
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween, // 버튼을 오른쪽에 위치
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          '회원',
+                          style: TextStyle(
+                            fontFamily: 'NotoSansKR',
+                            color: Colors.black,
+                            fontSize: 34,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 centerTitle: false,
